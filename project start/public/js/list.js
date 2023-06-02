@@ -1,5 +1,15 @@
-function app(state, output) {
-  append(view(state), output);
+function app(state, output, event) {
+  R.compose(append(view(state)), clear())(output);
+
+  const stop = event(() => {
+    stop();
+    const newText = getText();
+    const newState = [...state, newText];
+
+    setText("");
+
+    app(newState, output, event);
+  });
 }
 
 function view(state) {
@@ -22,4 +32,6 @@ function message(content, index) {
   )(elem("div"));
 }
 
-app(Object.freeze([]), getElem("message-list"));
+const buttonClick = on("click", getElem("message-button"));
+
+app(Object.freeze([]), getElem("message-list"), buttonClick);

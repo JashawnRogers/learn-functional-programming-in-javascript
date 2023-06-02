@@ -2,6 +2,17 @@
 const elem = (tag) => document.createElement(tag);
 const text = (content) => document.createTextNode(content);
 const getElem = (id) => document.getElementById(id);
+const getText = () => getElem("message-text").value;
+const setText = (value) => (getElem("message-text").value = value);
+
+const on = R.curry(function (eventType, element, callback) {
+  element.addEventListener(eventType, callback);
+
+  return function () {
+    element.removeEventListener(eventType, callback);
+  };
+});
+
 // Currying allows us to create specialized functions based upon any provided parameters.
 // In this addClass function we're able to break it down into 2 functions (due to having 2 parameters),
 // in the compose function on line 32
@@ -22,6 +33,12 @@ const append = R.curry(function append(node, element) {
 
 const attr = R.curry(function (attributeName, attributeValue, element) {
   element.setAttribute(attributeName, attributeValue);
+
+  return element;
+});
+
+const clear = R.curry(function (element) {
+  element.innerHTML = "";
 
   return element;
 });
